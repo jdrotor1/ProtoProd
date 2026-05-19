@@ -325,7 +325,7 @@ private fun ReviewContent(vm: WizardViewModel) {
     Spacer(Modifier.height(16.dp))
     Button(
         onClick = {
-            val text = vm.prompts()?.auditPrompt() ?: return@Button
+            val text = vm.audit()?.auditPrompt() ?: return@Button
             copyToClipboard(ctx, text, "Audit prompt")
         },
         modifier = Modifier.fillMaxWidth(),
