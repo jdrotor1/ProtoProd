@@ -132,11 +132,15 @@ class WizardViewModel(app: Application) : AndroidViewModel(app) {
         _ui.update { it.copy(transientError = null) }
     }
 
-    fun prompts(): PromptBuilders? {
+fun brainstorm(): BrainstormBuilder? {
         val cat = _ui.value.catalog ?: return null
-        return PromptBuilders(_ui.value.state, cat)
+        return BrainstormBuilder(_ui.value.state, cat)
     }
 
+    fun audit(): AuditBuilder? {
+        val cat = _ui.value.catalog ?: return null
+        return AuditBuilder(_ui.value.state, cat)
+    }
     private fun autoSave() {
         viewModelScope.launch { persistence.save(_ui.value.state) }
     }
