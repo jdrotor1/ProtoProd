@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.projectscaffold.data.CatalogRepository
 import com.example.projectscaffold.data.ParsedCatalog
 import com.example.projectscaffold.data.WizardStatePersistence
-import com.example.projectscaffold.generator.PromptBuilders
+import com.example.projectscaffold.generator.AuditBuilder
+import com.example.projectscaffold.generator.BrainstormBuilder
 import com.example.projectscaffold.model.Questions
 import com.example.projectscaffold.model.WizardQuestion
 import com.example.projectscaffold.model.WizardState
