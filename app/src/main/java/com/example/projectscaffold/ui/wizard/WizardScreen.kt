@@ -109,11 +109,11 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
                 Spacer(Modifier.height(16.dp))
                 PerStepButtons(
                     onBrainstorm = {
-                        val text = vm.prompts()?.brainstormPrompt(idx) ?: return@PerStepButtons
+                        val text = vm.brainstorm()?.brainstormPrompt(idx) ?: return@PerStepButtons
                         copyToClipboard(ctx, text, "Brainstorm prompt — Q${idx + 1}")
                     },
                     onBuild = {
-                        val text = vm.prompts()?.buildPrompt(idx) ?: return@PerStepButtons
+                        val text = vm.brainstorm()?.buildPrompt(idx) ?: return@PerStepButtons
                         copyToClipboard(ctx, text, "Build prompt — Q${idx + 1}")
                     }
                 )
