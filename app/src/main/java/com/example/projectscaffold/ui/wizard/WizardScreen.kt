@@ -1,4 +1,4 @@
-package com.example.projectscaffold.ui.wizard
+Ipackage com.example.projectscaffold.ui.wizard
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -197,7 +197,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.ContentCopy,
+                Icons.Filled.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
@@ -209,7 +209,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.ContentCopy,
+                Icons.Filled.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
