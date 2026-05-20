@@ -34,6 +34,7 @@ internal fun copyToClipboard(context: Context, text: String, label: String) {
     clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
     Toast.makeText(context, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WizardScreen(vm: WizardViewModel = viewModel()) {
     val ui by vm.ui.collectAsState()
@@ -67,7 +68,7 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
     }
     
     val q = Questions.ALL[idx]
-@OptIn(ExperimentalMaterial3Api::class)
+
     Scaffold(
         topBar = {
             TopAppBar(
