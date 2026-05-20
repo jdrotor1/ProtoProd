@@ -551,9 +551,7 @@ private fun ReviewRow(key: String, value: String) {
         )
     }
 }
+import androidx.compose.ui.draw.alpha
 
-private fun copyToClipboard(ctx: Context, text: String, label: String) {
-    val cm = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    cm.setPrimaryClip(ClipData.newPlainText(label, text))
     Toast.makeText(ctx, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
 }
