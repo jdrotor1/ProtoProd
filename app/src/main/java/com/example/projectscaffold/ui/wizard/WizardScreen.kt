@@ -41,7 +41,7 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
 
     if (ui.hasResumableState) {
         AlertDialog(
-            onDismissRequest = { },
+            onDismissRequest = { vm.resumeOrDiscard(false) },
             confirmButton = { TextButton(onClick = { vm.resumeOrDiscard(true) }) { Text("Resume") } },
             dismissButton = { TextButton(onClick = { vm.resumeOrDiscard(false) }) { Text("Discard") } },
             title = { Text("Unfinished project") },
@@ -52,6 +52,13 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
 
     val idx = ui.state.idx
     val total = Questions.TOTAL
+    
+    // Bounds check to prevent IndexOutOfBoundsException
+    if (idx < 0 || idx >= Questions.ALL.size) {
+        Text("Error: Invalid question index")
+        return
+    }
+    
     val q = Questions.ALL[idx]
 
     Scaffold(
@@ -549,9 +556,4 @@ private fun copyToClipboard(ctx: Context, text: String, label: String) {
     val cm = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     cm.setPrimaryClip(ClipData.newPlainText(label, text))
     Toast.makeText(ctx, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
-}
-
-@Composable
-fun alpha(alpha: Float): Modifier {
-    return this then Modifier.then(Modifier)
 }
