@@ -12,7 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -196,7 +196,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Outlined.ContentCopy,
+                Icons.Default.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
@@ -208,7 +208,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Outlined.ContentCopy,
+                Icons.Default.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
@@ -515,7 +515,7 @@ private fun ReviewContent(vm: WizardViewModel) {
         )
     ) {
         Icon(
-            Icons.Outlined.ContentCopy,
+            Icons.Default.ContentCopy,
             contentDescription = "Copy",
             modifier = Modifier.size(18.dp)
         )
