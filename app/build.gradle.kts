@@ -53,11 +53,11 @@ dependencies {
 
     val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
     implementation(composeBom)
-    implementation("androidx.compose.material3:material3-icons:1.2.1")  // Add explicit version
+    implementation("androidx.compose.material:material-icons)  // Add explicit version
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material")
 
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
