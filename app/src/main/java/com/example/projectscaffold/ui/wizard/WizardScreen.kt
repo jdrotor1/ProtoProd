@@ -4,10 +4,15 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -64,21 +69,54 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
                 },
                 actions = {
                     TextButton(onClick = { vm.reset() }) { Text("Reset") }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                )
             )
         },
         bottomBar = {
             Surface(tonalElevation = 3.dp) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    OutlinedButton(enabled = idx > 0, onClick = { vm.back() }) { Text("Back") }
-                    Spacer(Modifier.weight(1f))
+                    OutlinedButton(
+                        enabled = idx > 0,
+                        onClick = { vm.back() },
+                        modifier = Modifier.weight(0.4f)
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text("Back")
+                    }
+                    Spacer(Modifier.weight(0.2f))
                     if (q is WizardQuestion.Review) {
-                        Text("End of wizard", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            "End of wizard",
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(0.4f)
+                        )
                     } else {
-                        Button(onClick = { vm.next() }) { Text("Next") }
+                        Button(
+                            onClick = { vm.next() },
+                            modifier = Modifier.weight(0.4f)
+                        ) {
+                            Text("Next")
+                            Spacer(Modifier.width(4.dp))
+                            Icon(
+                                Icons.Default.Check,
+                                contentDescription = "Next",
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -93,16 +131,25 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
         ) {
             LinearProgressIndicator(
                 progress = { (idx.toFloat() / (total - 1).toFloat()).coerceIn(0f, 1f) },
-                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
             )
 
-            Text("Question ${idx + 1} of $total", style = MaterialTheme.typography.labelMedium)
-
-            when (q) {
-                is WizardQuestion.Text       -> TextQuestionContent(q, vm)
-                is WizardQuestion.Spec       -> SpecQuestionContent(q, vm)
-                is WizardQuestion.CategoryQ  -> CategoryQuestionContent(q, vm)
-                is WizardQuestion.Review     -> ReviewContent(vm)
+            AnimatedContent(
+                targetState = q,
+                label = "Question transition",
+                transitionSpec = {
+                    slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                            slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+                }
+            ) { question ->
+                when (question) {
+                    is WizardQuestion.Text -> TextQuestionContent(question, vm)
+                    is WizardQuestion.Spec -> SpecQuestionContent(question, vm)
+                    is WizardQuestion.CategoryQ -> CategoryQuestionContent(question, vm)
+                    is WizardQuestion.Review -> ReviewContent(vm)
+                }
             }
 
             if (q !is WizardQuestion.Review) {
@@ -125,9 +172,35 @@ fun WizardScreen(vm: WizardViewModel = viewModel()) {
 
 @Composable
 private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedButton(onClick = onBrainstorm, modifier = Modifier.weight(1f)) { Text("Copy brainstorm") }
-        OutlinedButton(onClick = onBuild, modifier = Modifier.weight(1f)) { Text("Copy build") }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        OutlinedButton(
+            onClick = onBrainstorm,
+            modifier = Modifier.weight(1f)
+        ) {
+            Icon(
+                Icons.Default.ContentCopy,
+                contentDescription = "Copy",
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text("Brainstorm")
+        }
+        OutlinedButton(
+            onClick = onBuild,
+            modifier = Modifier.weight(1f)
+        ) {
+            Icon(
+                Icons.Default.ContentCopy,
+                contentDescription = "Copy",
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text("Build")
+        }
     }
 }
 
@@ -135,16 +208,30 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
 private fun TextQuestionContent(q: WizardQuestion.Text, vm: WizardViewModel) {
     val ui by vm.ui.collectAsState()
     Spacer(Modifier.height(8.dp))
-    Text(q.label + if (q.required) " *" else "", style = MaterialTheme.typography.titleLarge)
+    Text(
+        q.label + if (q.required) " *" else "",
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold
+    )
     if (q.help.isNotBlank()) {
-        Text(q.help, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+        Text(
+            q.help,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .alpha(0.7f)
+        )
     }
     OutlinedTextField(
         value = ui.state.texts[q.key].orEmpty(),
         onValueChange = { vm.updateText(q.key, it) },
         placeholder = { Text(q.help) },
         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        singleLine = false,
+        minLines = 3
     )
 }
 
@@ -155,51 +242,79 @@ private fun SpecQuestionContent(q: WizardQuestion.Spec, vm: WizardViewModel) {
     val udText = ui.state.udText[q.key].orEmpty()
 
     Spacer(Modifier.height(8.dp))
-    Text(q.label, style = MaterialTheme.typography.titleLarge)
+    Text(
+        q.label,
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold
+    )
     Text(
         if (q.multi) "Choose one or more. [User Defined] reveals a custom field."
         else "Choose one. [User Defined] reveals a custom field.",
         style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+        modifier = Modifier
+            .padding(top = 8.dp, bottom = 12.dp)
+            .alpha(0.7f)
     )
 
     q.options.forEach { opt ->
         val isUD = opt == "[User Defined]"
         val selected = if (isUD) sel.any { it.startsWith("UD:") } else opt in sel
-        ElevatedCard(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer
-                                  else MaterialTheme.colorScheme.surface
-            )
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+        
+        AnimatedContent(
+            targetState = selected,
+            label = "Selection state"
+        ) { isSelected ->
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp),
+                colors = CardDefaults.elevatedCardColors(
+                    containerColor = if (isSelected)
+                        MaterialTheme.colorScheme.primaryContainer
+                    else
+                        MaterialTheme.colorScheme.surface
+                )
             ) {
-                if (q.multi) {
-                    Checkbox(
-                        checked = selected,
-                        onCheckedChange = { vm.toggleSpec(q.key, opt, true, udText) }
-                    )
-                } else {
-                    RadioButton(
-                        selected = selected,
-                        onClick = { vm.toggleSpec(q.key, opt, false, udText) }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (q.multi) {
+                        Checkbox(
+                            checked = selected,
+                            onCheckedChange = { vm.toggleSpec(q.key, opt, true, udText) }
+                        )
+                    } else {
+                        RadioButton(
+                            selected = selected,
+                            onClick = { vm.toggleSpec(q.key, opt, false, udText) }
+                        )
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        opt,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
                     )
                 }
-                Spacer(Modifier.width(4.dp))
-                Text(opt, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
 
-    if (sel.any { it.startsWith("UD:") }) {
+    AnimatedVisibility(
+        visible = sel.any { it.startsWith("UD:") },
+        enter = slideInVertically() + fadeIn(),
+        exit = slideOutVertically() + fadeOut()
+    ) {
         OutlinedTextField(
             value = udText,
             onValueChange = { vm.updateUdText(q.key, it) },
             label = { Text("Custom value") },
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
         )
     }
 }
@@ -211,16 +326,29 @@ private fun CategoryQuestionContent(q: WizardQuestion.CategoryQ, vm: WizardViewM
     val entries = ui.catalog?.entries?.filter { it.category == q.name }.orEmpty()
 
     Spacer(Modifier.height(8.dp))
-    Text(q.name, style = MaterialTheme.typography.titleLarge)
+    Text(
+        q.name,
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold
+    )
     Text(
         (if (q.multi) "Choose one or more components." else "Choose one component.")
             + if (q.parts) " From the embedded catalog." else "",
         style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+        modifier = Modifier
+            .padding(top = 8.dp, bottom = 12.dp)
+            .alpha(0.7f)
     )
 
     if (entries.isEmpty()) {
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.warningContainer
+            )
+        ) {
             Text(
                 "No entries in this category in the embedded catalog. Tap Next to skip — you can ask Claude in brainstorm or add manually later.",
                 modifier = Modifier.padding(12.dp),
@@ -232,47 +360,79 @@ private fun CategoryQuestionContent(q: WizardQuestion.CategoryQ, vm: WizardViewM
 
     entries.forEach { entry ->
         val selected = entry.id in sel
-        ElevatedCard(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer
-                                  else MaterialTheme.colorScheme.surface
-            )
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
-                verticalAlignment = Alignment.Top
+        AnimatedContent(
+            targetState = selected,
+            label = "Category selection"
+        ) { isSelected ->
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp),
+                colors = CardDefaults.elevatedCardColors(
+                    containerColor = if (isSelected)
+                        MaterialTheme.colorScheme.primaryContainer
+                    else
+                        MaterialTheme.colorScheme.surface
+                )
             ) {
-                if (q.multi) {
-                    Checkbox(
-                        checked = selected,
-                        onCheckedChange = { vm.toggleCategory(q.catKey, entry.id, true) }
-                    )
-                } else {
-                    RadioButton(
-                        selected = selected,
-                        onClick = { vm.toggleCategory(q.catKey, entry.id, false) }
-                    )
-                }
-                Spacer(Modifier.width(4.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(entry.name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                    when (entry) {
-                        is CatalogEntry.Parts -> {
-                            val bits = mutableListOf<String>()
-                            if (entry.data.manufacturer.isNotBlank()) bits.add(entry.data.manufacturer)
-                            if (entry.data.mpn.isNotBlank()) bits.add(entry.data.mpn)
-                            if (entry.data.unit_cost_usd > 0) bits.add("$${entry.data.unit_cost_usd}")
-                            if (bits.isNotEmpty()) {
-                                Text(bits.joinToString("  ·  "), style = MaterialTheme.typography.bodySmall)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (q.multi) {
+                        Checkbox(
+                            checked = selected,
+                            onCheckedChange = { vm.toggleCategory(q.catKey, entry.id, true) }
+                        )
+                    } else {
+                        RadioButton(
+                            selected = selected,
+                            onClick = { vm.toggleCategory(q.catKey, entry.id, false) }
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            entry.name,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                        )
+                        when (entry) {
+                            is CatalogEntry.Parts -> {
+                                val bits = mutableListOf<String>()
+                                if (entry.data.manufacturer.isNotBlank()) bits.add(entry.data.manufacturer)
+                                if (entry.data.mpn.isNotBlank()) bits.add(entry.data.mpn)
+                                if (entry.data.unit_cost_usd > 0) bits.add("$${entry.data.unit_cost_usd}")
+                                if (bits.isNotEmpty()) {
+                                    Text(
+                                        bits.joinToString("  ·  "),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier
+                                            .padding(top = 4.dp)
+                                            .alpha(0.8f)
+                                    )
+                                }
+                                if (entry.data.lifecycle_status != "active") {
+                                    Text(
+                                        entry.data.lifecycle_status,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.padding(top = 2.dp)
+                                    )
+                                }
                             }
-                            if (entry.data.lifecycle_status != "active") {
-                                Text(entry.data.lifecycle_status, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
-                            }
-                        }
-                        is CatalogEntry.NonParts -> {
-                            if (entry.data.notes.isNotBlank()) {
-                                Text(entry.data.notes, style = MaterialTheme.typography.bodySmall)
+                            is CatalogEntry.NonParts -> {
+                                if (entry.data.notes.isNotBlank()) {
+                                    Text(
+                                        entry.data.notes,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier
+                                            .padding(top = 4.dp)
+                                            .alpha(0.8f)
+                                    )
+                                }
                             }
                         }
                     }
@@ -288,11 +448,17 @@ private fun ReviewContent(vm: WizardViewModel) {
     val ctx = LocalContext.current
 
     Spacer(Modifier.height(8.dp))
-    Text("Build Summary", style = MaterialTheme.typography.titleLarge)
+    Text(
+        "Build Summary",
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold
+    )
     Text(
         "All 33 step prompts have been collected. By the end of Q33's build prompt, Claude has produced and assembled the 17 scaffold files. Use the audit button below to verify the assembled set.",
         style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
+        modifier = Modifier
+            .padding(top = 8.dp, bottom = 16.dp)
+            .alpha(0.8f)
     )
 
     ReviewCard("Basics") {
@@ -334,16 +500,30 @@ private fun ReviewContent(vm: WizardViewModel) {
             contentColor = MaterialTheme.colorScheme.onTertiary
         )
     ) {
+        Icon(
+            Icons.Default.ContentCopy,
+            contentDescription = "Copy",
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(Modifier.width(6.dp))
         Text("Copy audit prompt")
     }
 }
 
 @Composable
 private fun ReviewCard(title: String, content: @Composable ColumnScope.() -> Unit) {
-    ElevatedCard(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+    ElevatedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            Spacer(Modifier.height(8.dp))
+            Text(
+                title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(Modifier.height(10.dp))
             content()
         }
     }
@@ -351,9 +531,17 @@ private fun ReviewCard(title: String, content: @Composable ColumnScope.() -> Uni
 
 @Composable
 private fun ReviewRow(key: String, value: String) {
-    Column(modifier = Modifier.padding(vertical = 4.dp)) {
-        Text(key, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(value, style = MaterialTheme.typography.bodyMedium)
+    Column(modifier = Modifier.padding(vertical = 6.dp)) {
+        Text(
+            key,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            value,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }
 
@@ -361,4 +549,9 @@ private fun copyToClipboard(ctx: Context, text: String, label: String) {
     val cm = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     cm.setPrimaryClip(ClipData.newPlainText(label, text))
     Toast.makeText(ctx, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
+}
+
+@Composable
+fun alpha(alpha: Float): Modifier {
+    return this then Modifier.then(Modifier)
 }
