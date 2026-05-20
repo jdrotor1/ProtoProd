@@ -517,10 +517,17 @@ private fun ReviewContent(vm: WizardViewModel) {
         Spacer(Modifier.width(6.dp))
         Text("Copy audit prompt")
     }
+     ) {
+         Icon(
+             Icons.Default.ContentCopy,
+             contentDescription = "Copy",
+             modifier = Modifier.size(18.dp)
+         )
+         Spacer(Modifier.width(6.dp))
+         Text("Copy audit prompt")
+     }
 }
-}
-}
-}
+
 @Composable
 private fun ReviewCard(title: String, content: @Composable ColumnScope.() -> Unit) {
     ElevatedCard(
@@ -553,14 +560,11 @@ private fun ReviewRow(key: String, value: String) {
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold
         )
- // Add this helper function before the closing brace of the file (after line 552)
-@Composable
+    }
+}
+
 fun copyToClipboard(context: Context, text: String, label: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
     Toast.makeText(context, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
-}       
-    }
-}
-
 }
