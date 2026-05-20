@@ -196,7 +196,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.ContentCopy,
+                Icons.Filled.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
@@ -208,7 +208,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.ContentCopy,
+                Icons.Filled.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
@@ -515,7 +515,7 @@ private fun ReviewContent(vm: WizardViewModel) {
         )
     ) {
         Icon(
-            Icons.Default.ContentCopy,
+            Icons.Filled.ContentCopy,
             contentDescription = "Copy",
             modifier = Modifier.size(18.dp)
         )
