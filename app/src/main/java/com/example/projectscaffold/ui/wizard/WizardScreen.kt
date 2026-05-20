@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
+import androidx.
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -517,7 +518,9 @@ private fun ReviewContent(vm: WizardViewModel) {
         Text("Copy audit prompt")
     }
 }
-
+}
+}
+}
 @Composable
 private fun ReviewCard(title: String, content: @Composable ColumnScope.() -> Unit) {
     ElevatedCard(
@@ -560,9 +563,4 @@ private fun copyToClipboard(context: Context, text: String, label: String) {
     }
 }
 
-private fun copyToClipboard(ctx: Context, text: String, label: String) {
-    val clipboard = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText(label, text)
-    clipboard.setPrimaryClip(clip)
-    Toast.makeText(ctx, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
 }
