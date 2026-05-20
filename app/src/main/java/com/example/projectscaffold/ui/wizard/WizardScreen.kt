@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.projectscaffold.ui.wizard.WizardViewModel
 import com.example.projectscaffold.model.CatalogEntry
 import com.example.projectscaffold.model.Questions
 import com.example.projectscaffold.model.WizardQuestion
