@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.icons.Icons
-import androidx.compose.material3.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.icons.filled.Check
-import androidx.compose.material3.icons.filled.ContentCopy
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.default.ArrowBack
+import androidx.compose.material.icons.default.Check
+import androidx.compose.materiql.icons.default.ContentCopy
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -197,7 +197,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Filled.ContentCopy,
+                Icons.Default.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
@@ -209,7 +209,7 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Filled.ContentCopy,
+                Icons.Default.ContentCopy,
                 contentDescription = "Copy",
                 modifier = Modifier.size(18.dp)
             )
