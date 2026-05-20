@@ -550,6 +550,13 @@ private fun ReviewRow(key: String, value: String) {
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold
         )
+ // Add this helper function before the closing brace of the file (after line 552)
+@Composable
+private fun copyToClipboard(context: Context, text: String, label: String) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
+    Toast.makeText(context, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
+}       
     }
 }
 
