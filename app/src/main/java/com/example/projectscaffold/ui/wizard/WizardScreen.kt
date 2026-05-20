@@ -17,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -353,7 +354,7 @@ private fun CategoryQuestionContent(q: WizardQuestion.CategoryQ, vm: WizardViewM
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.warningContainer
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer
             )
         ) {
             Text(
@@ -551,7 +552,10 @@ private fun ReviewRow(key: String, value: String) {
         )
     }
 }
-import androidx.compose.ui.draw.alpha
 
+private fun copyToClipboard(ctx: Context, text: String, label: String) {
+    val clipboard = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(label, text)
+    clipboard.setPrimaryClip(clip)
     Toast.makeText(ctx, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
 }
