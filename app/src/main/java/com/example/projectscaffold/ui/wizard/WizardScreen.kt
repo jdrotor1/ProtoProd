@@ -196,9 +196,10 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.ContentCopy,
-                contentDescription = "Copy",
-                modifier = Modifier.size(18.dp)
+    Icons.AutoMirrored.Filled.ContentCopy,
+    contentDescription = "Copy",
+    modifier = Modifier.size(18.dp)
+)
             )
             Spacer(Modifier.width(6.dp))
             Text("Brainstorm")
@@ -208,9 +209,10 @@ private fun PerStepButtons(onBrainstorm: () -> Unit, onBuild: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) {
             Icon(
-                Icons.Default.ContentCopy,
-                contentDescription = "Copy",
-                modifier = Modifier.size(18.dp)
+    Icons.AutoMirrored.Filled.ContentCopy,
+    contentDescription = "Copy",
+    modifier = Modifier.size(18.dp)
+)
             )
             Spacer(Modifier.width(6.dp))
             Text("Build")
@@ -514,10 +516,10 @@ private fun ReviewContent(vm: WizardViewModel) {
             contentColor = MaterialTheme.colorScheme.onTertiary
         )
     ) {
-         Icon(
-             Icons.Default.ContentCopy,
-             contentDescription = "Copy",
-             modifier = Modifier.size(18.dp)
+        Icon(
+    Icons.AutoMirrored.Filled.ContentCopy,
+    contentDescription = "Copy",
+    modifier = Modifier.size(18.dp)
          )
          Spacer(Modifier.width(6.dp))
          Text("Copy audit prompt")
