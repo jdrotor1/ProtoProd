@@ -561,9 +561,3 @@ private fun ReviewRow(key: String, value: String) {
         )
     }
 }
-
-fun copyToClipboard(context: Context, text: String, label: String) {
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
-    Toast.makeText(context, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
-}
