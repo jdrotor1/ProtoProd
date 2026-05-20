@@ -1,4 +1,4 @@
-Ipackage com.example.projectscaffold.ui.wizard
+package com.example.projectscaffold.ui.wizard
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.icons.Icons
-import androidx.compose.material3.icons.automirrored.Filled.ArrowBack
-import androidx.compose.material3.icons.Outlined.Check
-import androidx.compose.material3.icons.Filled.ContentCopy
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
