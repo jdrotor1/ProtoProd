@@ -28,6 +28,12 @@ import com.example.projectscaffold.model.Questions
 import com.example.projectscaffold.model.WizardQuestion
 
 @OptIn(ExperimentalMaterial3Api::class)
+// Move this function to top-level (outside of composables)
+internal fun copyToClipboard(context: Context, text: String, label: String) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
+    Toast.makeText(context, "$label copied — paste in Claude", Toast.LENGTH_SHORT).show()
+}
 @Composable
 fun WizardScreen(vm: WizardViewModel = viewModel()) {
     val ui by vm.ui.collectAsState()
