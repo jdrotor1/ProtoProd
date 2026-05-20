@@ -514,15 +514,6 @@ private fun ReviewContent(vm: WizardViewModel) {
             contentColor = MaterialTheme.colorScheme.onTertiary
         )
     ) {
-        Icon(
-            Icons.Default.ContentCopy,
-            contentDescription = "Copy",
-            modifier = Modifier.size(18.dp)
-        )
-        Spacer(Modifier.width(6.dp))
-        Text("Copy audit prompt")
-    }
-     ) {
          Icon(
              Icons.Default.ContentCopy,
              contentDescription = "Copy",
